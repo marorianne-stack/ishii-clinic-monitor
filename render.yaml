@@ -1,0 +1,6 @@
+services:
+  - type: worker
+    name: ishii-clinic-monitor
+    runtime: python
+    buildCommand: pip install -r requirements.txt && python -m playwright install --with-deps chromium
+    startCommand: python monitor.py
