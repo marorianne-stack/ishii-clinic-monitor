@@ -28,7 +28,7 @@ with sync_playwright() as p:
     page.get_by_text("初診").click()
     page.get_by_role("button", name="次へ").click()
     page.get_by_text("予約日時を選択してください").wait_for()
-    page.get_by_text("09:00", exact=True).wait_for()
+    page.locator("td button").first.wait_for(timeout=60000)
     print(page.title())
 
     
@@ -73,4 +73,4 @@ with sync_playwright() as p:
         page.reload()
 
         page.get_by_text("予約日時を選択してください").wait_for()
-        page.get_by_text("09:00", exact=True).wait_for()
+        page.locator("td button").first.wait_for(timeout=60000)
