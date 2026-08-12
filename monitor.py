@@ -35,7 +35,7 @@ with sync_playwright() as p:
     buttons = page.locator("td button")
     print("td内buttonの数 =", buttons.count())
 
-    x_path = buttons.nth(0).locator("svg path").first.get_attribute("d")
+    x_path = buttons.locator("svg path").first.get_attribute("d")
     notified = False
     while True:
         found = False
