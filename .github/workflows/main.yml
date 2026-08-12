@@ -33,4 +33,5 @@ jobs:
           python -m playwright install --with-deps chromium
 
       - name: 予約監視を開始
-        run: python monitor.py
+       run: python -u monitor.py
+       
