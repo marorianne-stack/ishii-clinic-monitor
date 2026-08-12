@@ -21,7 +21,7 @@ def send_line(message):
     response = requests.post(url, headers=headers, json=data)
     print("LINE送信結果:", response.status_code, response.text)
 with sync_playwright() as p:
-    browser = p.chromium.launch(headless=False)
+    browser = p.chromium.launch(headless=True)
     page = browser.new_page()
     page.goto("https://patient.digikar-smart.jp/institutions/41e9afbb-777b-4052-b928-df75cf7cb74a/reserve")
     page.get_by_role("button", name="ジュベルックボリューム（医師手打ち・局所麻酔込み）").click()
