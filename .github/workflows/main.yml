@@ -3,8 +3,9 @@ name: 石井クリニック予約監視
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */5 * * *"
-
+    - cron: "5 0,5,10,15,20 * * *"
+      timezone: "Asia/Tokyo"
+      
 concurrency:
   group: ishii-clinic-monitor
   cancel-in-progress: true
