@@ -52,7 +52,7 @@ with sync_playwright() as p:
 
             path = svg.locator("path").first.get_attribute("d")
 
-        if True
+        if True:
             print("★空き候補！", i, "文字=", repr(text))
 
             if not notified:
