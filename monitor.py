@@ -37,41 +37,42 @@ with sync_playwright() as p:
 
     x_path = buttons.locator("svg path").first.get_attribute("d")
     notified = False
+
     while True:
+        button_data = page.locator("td button").evaluate_all("""
+            buttons => buttons.map(button => {
+                const path = button.querySelector("svg path");
+                return {
+                    text: button.innerText.trim(),
+                    path: path ? path.getAttribute("d") : null
+                };
+            })
+        """)
+
         found = False
 
-    buttons = page.locator("td button")
+        for i, data in enumerate(button_data):
+            text = data["text"]
+            path = data["path"]
 
-    for i in range(buttons.count()):
-        b = buttons.nth(i)
-        text = b.inner_text().strip()
-        svg = b.locator("svg")
+            if path is None:
+                continue
 
-        if svg.count() == 0:
-            continue
+            if text != "-" and path != x_path:
+                print("★空き候補！", i, "文字=", repr(text), flush=True)
 
-        path_locator = svg.locator("path")
+                if not notified:
+                    for _ in range(10):
+                        send_line("石井クリニックに空き候補が出ました！予約ページを確認してね")
+                        time.sleep(60)
 
-        if path_locator.count() == 0:
-            continue
+                    notified = True
 
-        path = path_locator.first.get_attribute("d")
+                found = True
 
-        if text != "-" and path != x_path:
-            print("★空き候補！", i, "文字=", repr(text))
+        if not found:
+            print("空きなし", flush=True)
+            notified = False
 
-            if not notified:
-                for _ in range(10):
-                    send_line("石井クリニックに空き候補が出ました！予約ページを確認してね")
-                    time.sleep(60)
-
-                notified = True
-
-            found = True
-
-    if not found:
-        print("空きなし")
-        notified = False
-
-    print("30秒後に再チェックします")
-    time.sleep(30)
+        print("30秒後に再チェックします", flush=True)
+        time.sleep(30)
