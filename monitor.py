@@ -40,17 +40,22 @@ with sync_playwright() as p:
     while True:
         found = False
 
-        buttons = page.locator("td button")
+    buttons = page.locator("td button")
 
-        for i in range(buttons.count()):
-            b = buttons.nth(i)
-            text = b.inner_text().strip()
-            svg = b.locator("svg")
+    for i in range(buttons.count()):
+        b = buttons.nth(i)
+        text = b.inner_text().strip()
+        svg = b.locator("svg")
 
-            if svg.count() == 0:
-                continue
+        if svg.count() == 0:
+            continue
 
-            path = svg.locator("path").first.get_attribute("d")
+        path_locator = svg.locator("path")
+
+        if path_locator.count() == 0:
+            continue
+
+        path = path_locator.first.get_attribute("d")
 
         if text != "-" and path != x_path:
             print("★空き候補！", i, "文字=", repr(text))
@@ -59,18 +64,14 @@ with sync_playwright() as p:
                 for _ in range(10):
                     send_line("石井クリニックに空き候補が出ました！予約ページを確認してね")
                     time.sleep(60)
+
                 notified = True
 
             found = True
 
-        if not found:
-            print("空きなし")
-            notified = False
+    if not found:
+        print("空きなし")
+        notified = False
 
-        print("30秒後に再チェックします")
-        time.sleep(30)
-
-        page.reload()
-
-        page.get_by_text("予約日時を選択してください").wait_for()
-        page.locator("td button").first.wait_for(timeout=60000)
+    print("30秒後に再チェックします")
+    time.sleep(30)
